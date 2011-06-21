@@ -1,0 +1,6 @@
+In objects - Ball.cpp and ball.h - so all the attacks for the player are just balls. The ball class gets something sent to it that determines what kind of ball it is. Then it sets the image, sound, etc. The collision detection for the balls are in here, but not the enemies. 
+
+In enemies folder, pretty much all the enemies have a variable m_life_left which is their amount of life. These may need to be altered we go. 
+
+There's lots of stuff that needs to be done so we should probably sit down and work on it. 
+

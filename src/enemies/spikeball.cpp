@@ -1,7 +1,8 @@
 /***************************************************************************
  * spikeball.cpp  -  spiky enemy
  *
- * Copyright (C) 2009 Florian Richter
+ * Copyright (C) 2011 - Cody Van De Mark
+ * Copyright (C) 2009 Florian Richter (Original)
  ***************************************************************************/
 /*
    This program is free software; you can redistribute it and/or modify
