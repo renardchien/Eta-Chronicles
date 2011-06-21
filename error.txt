@@ -1,0 +1,15 @@
+make  all-recursive
+make[1]: Entering directory `/home/ren/Desktop/smc-1.9'
+Making all in src
+make[2]: Entering directory `/home/ren/Desktop/smc-1.9/src'
+g++ -DHAVE_CONFIG_H -I. -I..  -DDATA_DIR="\"/usr/local/share/smc\"" -D_GNU_SOURCE=1 -D_REENTRANT -I/usr/include/SDL   -I/usr/include/CEGUI   -Wall -Wpointer-arith -g -O2 -MT ball.o -MD -MP -MF .deps/ball.Tpo -c -o ball.o `test -f 'objects/ball.cpp' || echo './'`objects/ball.cpp
+mv -f .deps/ball.Tpo .deps/ball.Po
+g++ -Wall -Wpointer-arith -g -O2   -o smc audio.o random_sound.o sound_manager.o camera.o collision.o editor.o filesystem.o resource_manager.o file_parser.o framerate.o game_core.o i18n.o main.o vector.o utilities.o sprite_manager.o turtle_boss.o eato.o enemy.o gee.o furball.o flyon.o krush.o rokko.o spika.o spikeball.o static.o thromp.o turtle.o hud.o menu.o menu_data.o joystick.o keyboard.o mouse.o global_effect.o level_background.o level.o level_editor.o level_manager.o level_settings.o animated_sprite.o ball.o bonusbox.o box.o enemystopper.o goldpiece.o level_entry.o level_exit.o moving_platform.o movingsprite.o path.o powerup.o spinbox.o sprite.o star.o text_box.o world_layer.o overworld.o world_player.o world_waypoint.o world_editor.o world_manager.o world_sprite_manager.o player.o preferences.o savegame.o animation.o font.o gl_surface.o img_manager.o img_settings.o renderer.o video.o  -lSDL_ttf -lSDL_mixer -lSDL_image -lpng -lGLU -lGL -lboost_filesystem  -lSDL   -lCEGUIBase -lCEGUIOpenGLRenderer  
+make[2]: Leaving directory `/home/ren/Desktop/smc-1.9/src'
+Making all in data
+make[2]: Entering directory `/home/ren/Desktop/smc-1.9/data'
+make[2]: Nothing to be done for `all'.
+make[2]: Leaving directory `/home/ren/Desktop/smc-1.9/data'
+make[2]: Entering directory `/home/ren/Desktop/smc-1.9'
+make[2]: Leaving directory `/home/ren/Desktop/smc-1.9'
+make[1]: Leaving directory `/home/ren/Desktop/smc-1.9'

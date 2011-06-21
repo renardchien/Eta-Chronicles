@@ -1,0 +1,4 @@
+changed shoot_counter in player.cpp
+added num_shots to player.h
+
+changed velocities in ball.cpp
