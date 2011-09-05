@@ -215,6 +215,46 @@ public:
 	cMovingSprite *m_item;
 };
 
+/* *** *** *** *** *** cWeaponBox *** *** *** *** *** *** *** *** *** *** *** *** */
+
+class cWeaponBox : public cStatusText
+{
+public:
+	cWeaponBox( float x = 0.0f, float y = 0.0f );
+	virtual ~cWeaponBox( void );
+
+	// update
+	virtual void Update( void );
+	// draw
+	virtual void Draw( cSurface_Request *request = NULL );
+
+	/* Set the item
+	* sound : if set the box sound is played
+	*/
+	void Set_Item( SpriteType item_type, float xpos_new, bool sound = 1 );
+	// Activates the itembox
+	void Request_Item( void );
+	// push the item back to the itembox
+	void Push_back( void );
+	
+	void Reset( void );
+
+	/* The current Item
+	 * uses the Item defines
+	 */
+	SpriteType m_item_id;
+
+	// alpha effect
+	float m_item_counter;
+	// alpha effect mod
+	bool m_item_counter_mod;
+
+	// itembox color
+	Color m_box_color;
+
+	// stored item
+	cMovingSprite *m_item;
+};
 
 /* *** *** *** *** *** cLifeDisplay *** *** *** *** *** *** *** *** *** *** *** *** */
 
@@ -252,6 +292,46 @@ public:
 	
 	//life_amount
 	int life_amount;
+	
+};
+
+/* *** *** *** *** *** cEnergyDisplay *** *** *** *** *** *** *** *** *** *** *** *** */
+
+
+class cEnergyDisplay : public cStatusText
+{
+public:
+	cEnergyDisplay( float x = 0.0f, float y = 0.0f );
+	virtual ~cEnergyDisplay( void );
+
+	// update
+	virtual void Update( void );
+	// draw
+	virtual void Draw( cSurface_Request *request = NULL );
+
+	//set energy amount
+	void Set_Energy( int energy_bar);
+	
+	//decreases energy amount by amount decreased
+	void Decrease_Energy( int energy_decreased);
+
+	//increases energy from mushroom by amount increased
+	void IncreaseEnergy( int energy_increased);
+
+	//resets energy bar
+	void Reset( void );
+
+	// alpha effect
+	float m_item_counter;
+	// alpha effect mod
+	bool m_item_counter_mod;
+
+	// itembox color
+	Color m_box_color;
+
+	//Weapon1 energy amount
+	int energy_amount;
+	
 };
 
 
@@ -305,7 +385,11 @@ extern cGoldDisplay *pHud_Goldpieces;
 extern cLiveDisplay *pHud_Lives;
 extern cTimeDisplay *pHud_Time;
 extern cItemBox *pHud_Itembox;
+extern cWeaponBox *pHud_Weapon1;
+extern cWeaponBox *pHud_Weapon2;
+extern cWeaponBox *pHud_Weapon3;
 extern cLifeDisplay *pHud_LifeDisplay;
+extern cEnergyDisplay *pHud_EnergyDisplay;
 
 /* *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** */
 

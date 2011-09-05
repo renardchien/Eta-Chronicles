@@ -97,15 +97,34 @@ void cHud_Manager :: Load( void )
 	// Live Display
 	pHud_Lives = new cLiveDisplay();
 	Add( static_cast<cHudSprite *>(pHud_Lives) );
-	// Gold Display
+	// Gold DisplayGold
 	pHud_Goldpieces = new cGoldDisplay();
 	Add( static_cast<cHudSprite *>(pHud_Goldpieces) );
 	// Itembox
 	pHud_Itembox = new cItemBox();
 	Add( static_cast<cHudSprite *>(pHud_Itembox) );
+	
+	// Weapon1
+	pHud_Weapon1 = new cWeaponBox();
+	Add( static_cast<cHudSprite *>(pHud_Weapon1) );
+	pHud_Weapon1->Set_Item( TYPE_MUSHROOM_DEFAULT, 0.11f );
+
+	pHud_Weapon2 = new cWeaponBox();
+	Add( static_cast<cHudSprite *>(pHud_Weapon2) );
+	pHud_Weapon2->Set_Item( TYPE_FIREPLANT, 0.21f );
+
+	pHud_Weapon3 = new cWeaponBox();
+	Add( static_cast<cHudSprite *>(pHud_Weapon3) );
+	pHud_Weapon3->Set_Item( TYPE_MUSHROOM_BLUE, 0.31f );
+
 	//Life Display
 	pHud_LifeDisplay = new cLifeDisplay();
 	Add( static_cast<cHudSprite *>(pHud_LifeDisplay) );
+
+	//Energy Display
+	pHud_EnergyDisplay = new cEnergyDisplay();
+	Add( static_cast<cHudSprite *>(pHud_EnergyDisplay) );
+
 	// Debug Display
 	pHud_Debug = new cDebugDisplay();
 	Add( static_cast<cHudSprite *>(pHud_Debug) );
@@ -128,6 +147,11 @@ void cHud_Manager :: Unload( void )
 	pHud_Time = NULL;
 	pHud_Debug = NULL;
 	pHud_Itembox = NULL;
+	pHud_LifeDisplay = NULL;
+	pHud_EnergyDisplay = NULL;
+	pHud_Weapon1 = NULL;
+	pHud_Weapon2 = NULL;
+	pHud_Weapon3 = NULL;
 	
 	m_loaded = 0;
 }
@@ -143,7 +167,8 @@ void cHud_Manager :: Update_Text( void )
 		if( Game_Mode != MODE_OVERWORLD )
 		{
 			// goldpiece
-			item->m_rect_goldpiece.m_y = item->m_rect_maryo_head.m_y + 6.0f;
+			//this is where you change the height of the gold pieces on the hud, but not the text
+			item->m_rect_goldpiece.m_y = item->m_rect_maryo_head.m_y + 63.0f;
 		}
 		else
 		{
@@ -170,7 +195,8 @@ void cHud_Manager :: Update_Text( void )
 	{
 		if( Game_Mode != MODE_OVERWORLD )
 		{
-			pHud_Goldpieces->Set_Pos( 280.0f, 18.0f );
+			//this is where you change the height of the gold pieces text
+			pHud_Goldpieces->Set_Pos( 284.0f, 75.0f );
 		}
 		else
 		{
@@ -184,7 +210,7 @@ void cHud_Manager :: Update_Text( void )
 	{
 		if( Game_Mode != MODE_OVERWORLD )
 		{
-			pHud_Points->Set_Pos( 50.0f, 18.0f );
+			pHud_Points->Set_Pos( 75.0f, 75.0f );
 		}
 		else
 		{
@@ -196,7 +222,7 @@ void cHud_Manager :: Update_Text( void )
 
 	if( pHud_Time )
 	{
-		pHud_Time->Set_Pos( game_res_w * 0.70f, 18.0f );
+		pHud_Time->Set_Pos( game_res_w * 0.70f, 71.0f );
 		pHud_Time->Update();
 	}
 
@@ -211,11 +237,35 @@ void cHud_Manager :: Update_Text( void )
 		pHud_Itembox->Set_Pos( game_res_w * 0.49f, 10.0f );
 		pHud_Itembox->Update();
 	}
+
+	if ( pHud_Weapon1)
+	{
+		pHud_Weapon1->Set_Pos( game_res_w * 0.09f, 10.0f );
+		pHud_Weapon1->Update();
+	}
+
+	if ( pHud_Weapon2)
+	{
+		pHud_Weapon2->Set_Pos( game_res_w * 0.19f, 10.0f );
+		pHud_Weapon2->Update();
+	}
+
+	if ( pHud_Weapon3)
+	{
+		pHud_Weapon3->Set_Pos( game_res_w * 0.29f, 10.0f );
+		pHud_Weapon3->Update();
+	}
 	
 	if (pHud_LifeDisplay )
 	{
 		pHud_LifeDisplay->Set_Pos(0.1f, 8.0f );
 		pHud_LifeDisplay->Update();
+	}
+
+	if (pHud_EnergyDisplay )
+	{
+		pHud_EnergyDisplay->Set_Pos(34.0f, 8.0f );
+		pHud_EnergyDisplay->Update();
 	}
 }
 
@@ -277,7 +327,7 @@ cMenuBackground :: cMenuBackground( float x /* = 0.0f */, float y /* = 0.0f */ )
 	m_rect_maryo_head.m_x = game_res_w * 0.933f;
 	m_rect_maryo_head.m_y = 15;
 	// goldpiece
-	m_rect_goldpiece.m_x = 250;
+	m_rect_goldpiece.m_x = 255;
 	m_rect_goldpiece.m_y = 0;
 }
 
@@ -312,6 +362,7 @@ cStatusText :: cStatusText( float x /* = 0.0f */, float y /* = 0.0f */ )
 	m_sprite_array = ARRAY_HUD;
 
 	Set_Shadow( black, 1.5f );
+
 }
 
 cStatusText :: ~cStatusText( void )
@@ -844,6 +895,182 @@ void cItemBox :: Reset( void )
 	m_box_color = white;
 }
 
+/* *** *** *** *** *** *** *** cWeaponBox *** *** *** *** *** *** *** *** *** *** */
+
+cWeaponBox :: cWeaponBox( float x /* = 0.0f */, float y /* = 0.0f */ )
+: cStatusText( x, y )
+{
+	m_sprite_array = ARRAY_HUD;
+	m_type = TYPE_WEAPON;
+	m_name = "HUD Weapon";
+
+	Set_Image( pVideo->Get_Surface( "game/itembox.png" ) );
+	// disable shadow
+	Set_Shadow_Pos( 0 );
+
+	m_box_color = white;
+
+	m_item_counter = 0;
+	m_item_counter_mod = 0;
+	m_item_id = TYPE_UNDEFINED;
+
+	m_item = new cMovingSprite();
+	m_item->Set_Ignore_Camera( 1 );
+	m_item->m_player_range = 0;
+	m_item->Set_Massive_Type( MASS_MASSIVE );
+	m_item->m_pos_z = 0.1299f;
+}
+
+cWeaponBox :: ~cWeaponBox( void )
+{
+	delete m_item;
+}
+
+void cWeaponBox :: Update( void )
+{
+	if( m_item_counter )
+	{
+		m_item->Move( 0.0f, 4.0f );
+
+		if( m_item_counter_mod )
+		{
+			m_item_counter += pFramerate->m_speed_factor * 10.0f;
+
+			if( m_item_counter >= 90.0f )
+			{
+				m_item_counter_mod = 0;
+				m_item_counter = 90.0f;
+			}
+		}
+		else
+		{
+			m_item_counter -= pFramerate->m_speed_factor * 10.0f;
+
+			if( m_item_counter <= 0.0f )
+			{
+				m_item_counter_mod = 1;
+				m_item_counter = 1.0f;
+			}
+		}
+
+		if( m_item->m_pos_y > game_res_h )
+		{
+			Reset();
+		}
+
+		cObjectCollisionType *col_list = m_item->Collision_Check( &m_item->m_col_rect, COLLIDE_ONLY_BLOCKING );
+
+		// if colliding with the player
+		if( col_list->Is_Included( TYPE_PLAYER ) )
+		{
+			// player can send an item back
+			SpriteType item_id_temp = m_item_id;
+			Reset();
+			pPlayer->Get_Item( item_id_temp, 1 );
+		}
+
+		delete col_list;
+	}
+}
+
+void cWeaponBox :: Draw( cSurface_Request *request /* = NULL */ )
+{
+	if( editor_enabled || Game_Mode == MODE_OVERWORLD || Game_Mode == MODE_MENU )
+	{
+		return;
+	}
+
+	if( m_item_id && m_item->m_image )
+	{
+		// with alpha
+		if( m_item_counter )
+		{
+			m_item->Set_Color( 255, 255, 255, 100 + static_cast<Uint8>(m_item_counter) );
+		}
+		
+		m_item->Draw();
+	}
+
+	Set_Color( m_box_color.red, m_box_color.green, m_box_color.blue );
+	cHudSprite::Draw();
+}
+
+void cWeaponBox :: Set_Item( SpriteType item_type, float xpos_new, bool sound /* = 1 */ )
+{
+	// play sound
+	//if( sound )
+	//{
+		//pAudio->Play_Sound( "itembox_set.ogg" );
+	//}
+	// reset data
+	Reset();
+
+	// reset startposition
+	m_item->Set_Pos( 0.0f, 0.0f, 1 );
+	// reset color
+	m_item->Set_Color( white );
+
+	if( item_type == TYPE_MUSHROOM_DEFAULT )
+	{
+		m_box_color = Color( static_cast<Uint8>(250), 50, 50 );
+		m_item->Set_Image( pVideo->Get_Surface( "game/items/mushroom_red.png" ) );
+	}
+	else if( item_type == TYPE_FIREPLANT )
+	{
+		m_box_color = Color( static_cast<Uint8>(250), 200, 150 );
+		m_item->Set_Image( pVideo->Get_Surface( "game/items/fireplant.png" ) );
+	}
+	else if( item_type == TYPE_MUSHROOM_BLUE )
+	{
+		m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+		m_item->Set_Image( pVideo->Get_Surface( "game/items/mushroom_blue.png" ) );
+	}
+
+
+	if( m_item->m_image )
+	{
+		//m_item->Set_Pos( m_pos_x - ( ( m_item->m_image->m_w - m_rect.m_w ) / 2 ), m_pos_y - ( ( m_item->m_image->m_h - m_rect.m_h ) / 2 ) );
+		m_item->Set_Pos( game_res_w * xpos_new, 20.0f  );
+	}
+
+	m_item_id = item_type;
+}
+
+void cWeaponBox :: Request_Item( void )
+{
+	if( !m_item_id || m_item_counter ) 
+	{
+		return;
+	}
+
+	pAudio->Play_Sound( "itembox_get.ogg" );
+
+	m_item_counter = 255.0f;
+	// draw item with camera
+	m_item->Set_Ignore_Camera( 0 );
+	m_item->Set_Pos( m_item->m_pos_x + pActive_Camera->x, m_item->m_pos_y + pActive_Camera->y );
+}
+
+void cWeaponBox :: Push_back( void )
+{
+	m_item_counter = 0.0f;
+	m_item_counter_mod = 0;
+
+	// draw item without camera
+	m_item->Set_Ignore_Camera( 1 );
+	m_item->Set_Pos( m_item->m_start_pos_x, m_item->m_start_pos_y );
+	m_item->Set_Color( white );
+}
+
+void cWeaponBox :: Reset( void )
+{
+	m_item->Set_Ignore_Camera( 1 );
+	m_item_id = TYPE_UNDEFINED;
+	m_item_counter = 0.0f;
+	m_item_counter_mod = 0;
+	m_box_color = white;
+}
+
 /* *** *** *** *** *** *** cLifeDisplay *** *** *** *** *** *** *** *** *** *** *** */
 
 
@@ -859,7 +1086,6 @@ cLifeDisplay :: cLifeDisplay( float x /* = 0.0f */, float y /* = 0.0f */ )
 	Set_Shadow_Pos( 0 );
 
 	m_box_color = white;
-
 	m_item_counter = 0;
 	m_item_counter_mod = 0;
 	
@@ -1047,6 +1273,326 @@ void cLifeDisplay :: IncreaseLife( int life_increased)
 void cLifeDisplay :: Reset( void )
 {
 	life_amount = 4;
+	Set_Life(4);
+	m_item_counter = 0.0f;
+	m_item_counter_mod = 0;
+	m_box_color = white;
+	m_box_color = Color( static_cast<Uint8>(158), 132, 103);
+}
+
+/* *** *** *** *** *** *** cEnergyDisplay *** *** *** *** *** *** *** *** *** *** *** */
+
+
+cEnergyDisplay :: cEnergyDisplay( float x /* = 0.0f */, float y /* = 0.0f */ )
+: cStatusText( x, y )
+{
+	m_sprite_array = ARRAY_HUD;
+	m_type = TYPE_ENERGYDISPLAY;
+	m_name = "HUD Energy Display";
+
+	Set_Image( pVideo->Get_Surface( "game/energy_full.png" ) );
+	// disable shadow
+	Set_Shadow_Pos( 0 );
+
+	m_box_color = white;
+	m_item_counter = 0;
+	m_item_counter_mod = 0;
+
+	energy_amount = 8;
+}
+
+cEnergyDisplay :: ~cEnergyDisplay( void )
+{
+
+}
+
+void cEnergyDisplay:: Update( void )
+{
+	if( m_item_counter )
+	{
+
+		if( m_item_counter_mod )
+		{
+			m_item_counter += pFramerate->m_speed_factor * 10.0f;
+
+			if( m_item_counter >= 90.0f )
+			{
+				m_item_counter_mod = 0;
+				m_item_counter = 90.0f;
+			}
+		}
+		else
+		{
+			m_item_counter -= pFramerate->m_speed_factor * 10.0f;
+
+			if( m_item_counter <= 0.0f )
+			{
+				m_item_counter_mod = 1;
+				m_item_counter = 1.0f;
+			}
+		}
+
+	}
+}
+
+void cEnergyDisplay :: Draw( cSurface_Request *request /* = NULL */ )
+{
+	if( editor_enabled || Game_Mode == MODE_OVERWORLD || Game_Mode == MODE_MENU )
+	{
+		return;
+	}
+
+	Set_Color( m_box_color.red, m_box_color.green, m_box_color.blue );
+	cHudSprite::Draw();
+}
+
+void cEnergyDisplay:: Set_Energy( int energy_bar )
+{
+	energy_amount = energy_bar;
+
+	if( energy_bar == 8)
+	{
+		m_box_color = Color( static_cast<Uint8>(250), 50, 50 );
+		Set_Image( pVideo->Get_Surface( "game/energy_full.png" ) );
+	}
+	else if( energy_bar == 7 )
+	{
+		m_box_color = Color( static_cast<Uint8>(250), 200, 150 );
+		Set_Image( pVideo->Get_Surface( "game/energy_high_full.png" ) );
+	}
+	else if( energy_bar == 6 )
+	{
+		m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+		Set_Image( pVideo->Get_Surface( "game/energy_high.png" ) );
+	}
+	else if ( energy_bar == 5)
+	{
+		m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+		Set_Image( pVideo->Get_Surface( "game/energy_mid_high.png" ) );	
+	}
+	else if ( energy_bar == 4)
+	{
+		m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+		Set_Image( pVideo->Get_Surface( "game/energy_mid.png" ) );	
+	}
+	else if ( energy_bar == 3)
+	{
+		m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+		Set_Image( pVideo->Get_Surface( "game/energy_low_mid.png" ) );	
+	}
+	else if ( energy_bar == 2)
+	{
+		m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+		Set_Image( pVideo->Get_Surface( "game/energy_low.png" ) );	
+	}
+	else if ( energy_bar == 1)
+	{
+		m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+		Set_Image( pVideo->Get_Surface( "game/energy_empty_low.png" ) );	
+	}
+	else if ( energy_bar < 1)
+	{
+		m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+		Set_Image( pVideo->Get_Surface( "game/energy_bar.png" ) );	
+	}
+	m_box_color = Color( static_cast<Uint8>(158), 132, 103);
+}
+
+void cEnergyDisplay :: Decrease_Energy( int energy_decreased)
+{
+
+	if (energy_decreased > 0)
+	{
+
+		if (energy_decreased == energy_amount || energy_decreased > energy_amount)
+		{
+
+			energy_amount = 0;
+			m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+			Set_Image( pVideo->Get_Surface( "game/energy_bar.png" ) );			
+		}
+		else
+		{
+			energy_amount = energy_amount - energy_decreased;
+			
+			if (energy_amount == 8)
+			{
+				m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+				Set_Image( pVideo->Get_Surface( "game/energy_full.png" ) );				
+			}
+			else if (energy_amount == 7)
+			{
+				m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+				Set_Image( pVideo->Get_Surface( "game/energy_high_full.png" ) );				
+			}
+			else if (energy_amount == 6)
+			{
+				m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+				Set_Image( pVideo->Get_Surface( "game/energy_high.png" ) );
+			}
+			else if (energy_amount == 5)
+			{
+				m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+				Set_Image( pVideo->Get_Surface( "game/energy_mid_high.png" ) );
+			}
+			else if (energy_amount == 4)
+			{
+				m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+				Set_Image( pVideo->Get_Surface( "game/energy_mid.png" ) );
+			}
+			else if (energy_amount == 3)
+			{
+				m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+				Set_Image( pVideo->Get_Surface( "game/energy_low_mid.png" ) );
+			}
+			else if (energy_amount == 2)
+			{
+				m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+				Set_Image( pVideo->Get_Surface( "game/energy_low.png" ) );
+			}
+			else if (energy_amount == 1)
+			{
+				m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+				Set_Image( pVideo->Get_Surface( "game/energy_empty_low.png" ) );
+			}
+			
+			m_box_color = Color( static_cast<Uint8>(158), 132, 103);
+		}
+	
+	}
+
+}
+
+void cEnergyDisplay :: IncreaseEnergy( int energy_increased )
+{
+
+	if (energy_increased > 0)
+	{
+		if (energy_amount == 8)
+		{
+			
+		}
+		else if (energy_amount == 7)
+		{
+			energy_amount = 8;
+		}
+		else if (energy_amount == 6)
+		{
+			if (energy_increased > 1)
+			{
+				energy_amount = 8;
+			}
+			else if (energy_increased == 1)
+			{
+				energy_amount++;
+			}
+		}
+		else if (energy_amount == 5)
+		{
+			if(energy_increased > 2)
+			{
+				energy_amount = 8;
+			}
+			else if (energy_increased < 3)
+			{
+				energy_amount = energy_amount + energy_increased;
+			}
+		}
+		else if (energy_amount == 4)
+		{
+			if(energy_increased > 3)
+			{
+				energy_amount = 8;
+			}
+			else if (energy_increased < 4)
+			{
+				energy_amount = energy_amount + energy_increased;
+			}
+		}
+		else if (energy_amount == 3)
+		{
+			if(energy_increased > 4)
+			{
+				energy_amount = 8;
+			}
+			else if (energy_increased < 5)
+			{
+				energy_amount = energy_amount + energy_increased;
+			}
+		}
+		else if (energy_amount == 2)
+		{
+			if(energy_increased > 5)
+			{
+				energy_amount = 8;
+			}
+			else if (energy_increased < 6)
+			{
+				energy_amount = energy_amount + energy_increased;
+			}
+		}
+		else if (energy_amount == 1)
+		{
+			if(energy_increased > 6)
+			{
+				energy_amount = 4;
+			}
+			else if (energy_increased < 7)
+			{
+				energy_amount = energy_amount + energy_increased;
+			}
+		}
+		
+		
+		if (energy_amount == 8)
+		{
+			m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+			Set_Image( pVideo->Get_Surface( "game/energy_full.png" ) );		
+		}
+		else if (energy_amount == 7)
+		{
+			m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+			Set_Image( pVideo->Get_Surface( "game/energy_high_full.png" ) );				
+		}
+		else if (energy_amount == 6)
+		{
+			m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+			Set_Image( pVideo->Get_Surface( "game/energy_high.png" ) );				
+		}
+		else if (energy_amount == 5)
+		{
+			m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+			Set_Image( pVideo->Get_Surface( "game/energy_mid_high.png" ) );
+		}
+		else if (energy_amount == 4)
+		{
+			m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+			Set_Image( pVideo->Get_Surface( "game/energy_mid.png" ) );
+		}
+		else if (energy_amount == 3)
+		{
+			m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+			Set_Image( pVideo->Get_Surface( "game/energy_low_mid.png" ) );
+		}
+		else if (energy_amount == 2)
+		{
+			m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+			Set_Image( pVideo->Get_Surface( "game/energy_low.png" ) );
+		}
+		else if (energy_amount == 1)
+		{
+			m_box_color = Color( static_cast<Uint8>(100), 100, 250 );
+			Set_Image( pVideo->Get_Surface( "game/energy_empty_low.png" ) );
+		}
+
+		m_box_color = Color( static_cast<Uint8>(158), 132, 103);
+	}
+}
+
+void cEnergyDisplay :: Reset( void )
+{
+	energy_amount = 8;
+	Set_Energy(8);
 	m_item_counter = 0.0f;
 	m_item_counter_mod = 0;
 	m_box_color = white;
@@ -1593,6 +2139,10 @@ cLiveDisplay *pHud_Lives = NULL;
 cTimeDisplay *pHud_Time = NULL;
 cItemBox *pHud_Itembox = NULL;
 cLifeDisplay *pHud_LifeDisplay = NULL;
+cEnergyDisplay *pHud_EnergyDisplay = NULL;
+cWeaponBox *pHud_Weapon1 = NULL;
+cWeaponBox *pHud_Weapon2 = NULL;
+cWeaponBox *pHud_Weapon3 = NULL;
 
 /* *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** */
 

@@ -1,7 +1,6 @@
 /***************************************************************************
  * flyon.h  -  headers for the corresponding cpp file
  *
- * Copyright (C) 2011 Cody Van De Mark
  * Copyright (C) 2003 - 2009 Florian Richter
  ***************************************************************************/
 /*

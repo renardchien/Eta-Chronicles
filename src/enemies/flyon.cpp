@@ -1,8 +1,7 @@
 /***************************************************************************
  * flyon.cpp  -  flying plant
  *
- * Copyright (C) 2011 - Cody Van De Mark
- * Copyright (C) 2003 - 2009 Florian Richter (Original)
+ * Copyright (C) 2003 - 2009 Florian Richter
  ***************************************************************************/
 /*
    This program is free software; you can redistribute it and/or modify
@@ -662,7 +661,24 @@ void cFlyon :: Handle_Collision_Player( cObjectCollision *collision )
 		pPlayer->Action_Jump( 1 );
 	}
 
-	pPlayer->DownGrade_Player();
+	if( collision->direction == DIR_TOP && pPlayer->m_state != STA_FLY && pPlayer->maryo_type == MARYO_BOOTS && pPlayer->weapon3_amount > 0 )
+	{
+		pPlayer->Check_Weapon3();
+
+		DownGrade();
+		pPlayer->Action_Jump( 1 );
+
+		if( m_dead )
+		{
+			pPlayer->Add_Kill_Multiplier();
+		}
+	}
+	else
+	{
+
+		pPlayer->DownGrade_Player();
+	}
+	
 }
 
 void cFlyon :: Editor_Activate( void )

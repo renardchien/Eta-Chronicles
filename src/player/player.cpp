@@ -45,6 +45,16 @@ const int power_jump_delta = 1000;
 const float cPlayer::m_default_pos_x = 200;
 const float cPlayer::m_default_pos_y = 50;
 const float MAX_LIFE = 3;
+const float MAX_ENERGY = 7;
+const float WEAPON1_MAX = 8;
+const float WEAPON2_MAX = 8;
+const float WEAPON3_MAX = 8;
+const float WEAPON4_MAX = 8;
+const float WEAPON5_MAX = 8;
+const float WEAPON6_MAX = 8;
+const float WEAPON7_MAX = 8;
+const float WEAPON8_MAX = 8;
+const float WEAPON9_MAX = 8;
 
 /* *** *** *** *** *** *** *** *** cPlayer *** *** *** *** *** *** *** *** *** */
 
@@ -56,7 +66,7 @@ cPlayer :: cPlayer( float x /* = m_default_pos_x */, float y /* = m_default_pos_
 	m_massive_type = MASS_MASSIVE;
 	m_state = STA_FALL;
 
-	maryo_type = MARYO_SMALL;
+	maryo_type = MARYO_FIRE;
 	maryo_type_temp_power = MARYO_DEAD;
 	m_name = "Maryo";	
 
@@ -106,6 +116,16 @@ cPlayer :: cPlayer( float x /* = m_default_pos_x */, float y /* = m_default_pos_
 	shoot_counter = 0;
 	num_shots = 0;
 	life_bar = MAX_LIFE;
+	energy_bar = MAX_ENERGY;
+	weapon1_amount = WEAPON1_MAX; 
+	weapon2_amount = WEAPON2_MAX;
+	weapon3_amount = WEAPON3_MAX;
+	weapon4_amount = WEAPON4_MAX;
+	weapon5_amount = WEAPON5_MAX;
+	weapon6_amount = WEAPON6_MAX;
+	weapon7_amount = WEAPON7_MAX;
+	weapon8_amount = WEAPON8_MAX;
+	weapon9_amount = WEAPON9_MAX;
 	active_object = NULL;
 	duck_direction = DIR_UNDEFINED;
 }
@@ -253,8 +273,11 @@ void cPlayer :: DownGrade_Player( bool delayed /* = 1 */, bool force /* = 0 */ )
 
 	pHud_LifeDisplay->Decrease_Life(1);
 	life_bar = MAX_LIFE;
+	energy_bar = MAX_ENERGY;
 	pHud_LifeDisplay->Reset();
 	pHud_LifeDisplay->Set_Life(4);
+	pHud_EnergyDisplay->Reset();
+	pHud_EnergyDisplay->Set_Energy(8);
 	Set_Type( MARYO_DEAD, 0, 0 );
 	pHud_Points->Clear();
 	Ball_Clear();
@@ -400,7 +423,7 @@ void cPlayer :: DownGrade_Player( bool delayed /* = 1 */, bool force /* = 0 */ )
 	}
 	
 	// clear
-	Set_Type( MARYO_SMALL, 0, 0 );
+	Set_Type( MARYO_FIRE, 0, 0 );
 	Clear_Input_Events();
 	pFramerate->Reset();
 
@@ -1202,7 +1225,7 @@ bool cPlayer :: Is_On_Climbable( float move_y /* = 0.0f */ )
 
 void cPlayer :: Start_Jump_Keytime( void )
 {
-	if( godmode || m_state == STA_STAY || m_state == STA_WALK || m_state == STA_RUN || m_state == STA_FALL || m_state == STA_FLY || m_state == STA_JUMP || ( m_state == STA_CLIMB && !pKeyboard->keys[pPreferences->m_key_up] ) )
+	if( godmode || maryo_type == MARYO_BOOTS || m_state == STA_STAY || m_state == STA_WALK || m_state == STA_RUN || m_state == STA_FALL || m_state == STA_FLY || m_state == STA_JUMP || ( m_state == STA_CLIMB && !pKeyboard->keys[pPreferences->m_key_up] ) )
 	{
 		UpKeytime = speedfactor_fps / 4;
 	}
@@ -1214,6 +1237,19 @@ void cPlayer :: Update_Jump_Keytime( void )
 	if( force_jump || ( UpKeytime && ( m_ground_object || godmode || m_state == STA_CLIMB ) ) )
 	{
 		Start_Jump();
+	}
+	if (  UpKeytime && maryo_type == MARYO_BOOTS && weapon3_amount > 0 )
+	{
+		weapon3_active = 1;
+		weapon3_amount--;
+		Start_Jump();
+		pHud_EnergyDisplay->Set_Energy(weapon3_amount);
+
+		if ( weapon3_amount < 1 )
+		{
+			Set_Type( MARYO_FIRE, 1, 1, 0 );
+		}
+		
 	}
 }
 
@@ -1236,6 +1272,10 @@ void cPlayer :: Start_Jump( float deaccel /* = 0.08f */ )
 		}
 		// ghost
 		else if( maryo_type == MARYO_GHOST )
+		{
+			pAudio->Play_Sound( "player/jump_ghost.ogg", RID_MARYO_JUMP );
+		}
+		else if ( maryo_type == MARYO_BOOTS )
 		{
 			pAudio->Play_Sound( "player/jump_ghost.ogg", RID_MARYO_JUMP );
 		}
@@ -1740,6 +1780,10 @@ void cPlayer :: Set_Type( Maryo_type new_type, bool animation /* = 1 */, bool so
 		{
 			pAudio->Play_Sound( "item/mushroom_ghost.ogg", RID_MUSHROOM_GHOST );
 		}
+		else if (new_type == MARYO_BOOTS )
+		{
+			pAudio->Play_Sound( "item/feather.ogg", RID_FEATHER );
+		}
 	}
 
 	if( !temp_power )
@@ -1779,6 +1823,8 @@ void cPlayer :: Set_Type( Maryo_type new_type, bool animation /* = 1 */, bool so
 		{
 			maryo_type = new_type;
 			Load_Images();
+			Set_Weapon(new_type);
+			pHud_EnergyDisplay->Set_Energy(energy_bar);
 		}
 	}
 
@@ -1819,6 +1865,78 @@ void cPlayer :: Set_Type( Maryo_type new_type, bool animation /* = 1 */, bool so
 
 	// check if on ground as the size could also change
 	Check_on_Ground();
+}
+
+void cPlayer :: Set_Weapon( Maryo_type new_type )
+{
+	switch ( new_type )
+	{
+		case MARYO_FIRE:
+		{
+			energy_bar = weapon1_amount;
+			break;
+		}
+		case MARYO_ICE:
+		{
+			energy_bar = weapon2_amount;
+			break;
+		}
+		case MARYO_BOOTS:
+		{
+			energy_bar = weapon3_amount;
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
+}
+
+void cPlayer :: Set_Weapon_Energy ( void )
+{
+
+	Set_Weapon ( maryo_type ) ;
+
+ /*
+	switch ( maryo_type )
+	{
+		case MARYO_FIRE:
+		{
+			energy_bar = weapon1_amount;
+			break;
+		}
+		case MARYO_ICE:
+		{
+			energy_bar = weapon2_amount;
+			break;
+		}
+		case MARYO_BOOTS:
+		{
+			energy_bar = weapon3_amount;
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
+
+	*/
+}
+
+void cPlayer :: Check_Weapon3 ( void )
+{
+	if (weapon3_active == 1)
+	{
+	}
+	else
+	{
+		weapon3_amount--;
+		pHud_EnergyDisplay->Set_Energy(weapon3_amount);
+		weapon3_active == 0;
+	}
+	
 }
 
 void cPlayer :: Set_Moving_State( Moving_state new_state )
@@ -2026,7 +2144,7 @@ void cPlayer :: Reset_Save( void )
 	pActive_Level->Unload();
 
 	// reset player
-	Set_Type( MARYO_SMALL, 0, 0 );
+	Set_Type( MARYO_FIRE, 0, 0 );
 	Reset();
 	lives = 3;
 	goldpieces = 0;
@@ -2035,6 +2153,20 @@ void cPlayer :: Reset_Save( void )
 	pHud_Time->Reset();
 	pHud_Manager->Update_Text();
 	pHud_Itembox->Reset();
+
+	life_bar = MAX_LIFE;
+	energy_bar = MAX_ENERGY;
+	weapon1_amount = WEAPON1_MAX;
+	weapon2_amount = WEAPON2_MAX;
+	weapon3_amount = WEAPON3_MAX;
+	weapon4_amount = WEAPON4_MAX;
+	weapon5_amount = WEAPON5_MAX;
+	weapon6_amount = WEAPON6_MAX;
+	weapon7_amount = WEAPON7_MAX;
+	weapon8_amount = WEAPON8_MAX;
+	weapon9_amount = WEAPON9_MAX;
+	pHud_LifeDisplay->Reset();
+	pHud_EnergyDisplay->Reset();
 }
 
 void cPlayer :: Reset( bool full /* = 1 */ )
@@ -2075,6 +2207,20 @@ void cPlayer :: Reset( bool full /* = 1 */ )
 		Set_Color_Combine( 0, 0, 0, 0 );
 		pHud_Itembox->Push_back();
 	}
+
+	life_bar = MAX_LIFE;
+	energy_bar = MAX_ENERGY;
+	weapon1_amount = WEAPON1_MAX;
+	weapon2_amount = WEAPON2_MAX;
+	weapon3_amount = WEAPON3_MAX;
+	weapon4_amount = WEAPON4_MAX;
+	weapon5_amount = WEAPON5_MAX;
+	weapon6_amount = WEAPON6_MAX;
+	weapon7_amount = WEAPON7_MAX;
+	weapon8_amount = WEAPON8_MAX;
+	weapon9_amount = WEAPON9_MAX;
+	pHud_LifeDisplay->Reset();
+	pHud_EnergyDisplay->Reset();
 }
 
 void cPlayer :: Reset_Position( void )
@@ -2090,6 +2236,7 @@ void cPlayer :: Reset_Position( void )
 void cPlayer :: Goto_Next_Level( void )
 {
 	life_bar = MAX_LIFE;
+	energy_bar = MAX_ENERGY;
 
 	// custom level
 	if( Game_Mode_Type == MODE_TYPE_LEVEL_CUSTOM )
@@ -2725,8 +2872,14 @@ void cPlayer :: Draw_Animation( Maryo_type new_mtype )
 		SDL_Delay( 120 );
 	}
 
+	//weapon energy bar 
+	Set_Weapon(new_mtype);
+	pHud_EnergyDisplay->Set_Energy(energy_bar);
+
 	pFramerate->Reset();
 }
+
+
 
 unsigned int cPlayer :: Get_Image( void ) const
 {
@@ -3112,6 +3265,59 @@ void cPlayer :: Load_Images( void )
 		/****************************************************/
 	}
 
+	else if( maryo_type == MARYO_BOOTS )
+	{
+		/********************* Cape **************************/
+		// standing
+		Add_Image( pVideo->Get_Surface( "maryo/flying/left" + special_state + ".png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/right" + special_state + ".png" ) );
+		// walking
+		Add_Image( pVideo->Get_Surface( "maryo/flying/walk_left_1" + special_state + ".png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/walk_right_1" + special_state + ".png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/walk_left_2" + special_state + ".png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/walk_right_2" + special_state + ".png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/walk_left_1" + special_state + ".png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/walk_right_1" + special_state + ".png" ) );
+		// running
+		Add_Image( pVideo->Get_Surface( "maryo/flying/run_left_1" + special_state + ".png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/run_right_1" + special_state + ".png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/run_left_2" + special_state + ".png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/run_right_2" + special_state + ".png" ) );
+		// falling
+		Add_Image( pVideo->Get_Surface( "maryo/flying/fall_left" + special_state + ".png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/fall_right" + special_state + ".png" ) );
+		// jumping
+		Add_Image( pVideo->Get_Surface( "maryo/flying/jump_left" + special_state + ".png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/fall_right" + special_state + ".png" ) );
+		// dead
+		Add_Image( pVideo->Get_Surface( "maryo/small/dead_left.png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/small/dead_right.png" ) );
+		// ducked
+		Add_Image( pVideo->Get_Surface( "maryo/flying/duck_left.png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/duck_right.png" ) );
+		// climbing
+		Add_Image( pVideo->Get_Surface( "maryo/flying/climb_left.png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/climb_right.png" ) );
+		// throwing
+		Add_Image( NULL );
+		Add_Image( NULL );
+		Add_Image( NULL );
+		Add_Image( NULL );
+		// flying
+		Add_Image( pVideo->Get_Surface( "maryo/flying/fly_left_1.png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/fly_right_1.png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/fly_left_2.png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/fly_right_2.png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/fly_left_3.png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/fly_right_3.png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/fly_left_4.png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/fly_right_4.png" ) );
+		// slow fall/parachute
+		Add_Image( pVideo->Get_Surface( "maryo/flying/slow_fall_left.png" ) );
+		Add_Image( pVideo->Get_Surface( "maryo/flying/slow_fall_right.png" ) );
+		/****************************************************/
+	}
+
 	// set image
 	Set_Image_Num( Get_Image() + m_direction );
 }
@@ -3372,6 +3578,8 @@ void cPlayer :: Action_Jump( bool enemy_jump /* = 0 */ )
 		next_jump_accel += 0.1f;
 	}
 
+	weapon3_active = 0;
+
 	// start keytime
 	Start_Jump_Keytime();
 	// check if starting a jump is possible
@@ -3534,7 +3742,8 @@ void cPlayer :: Action_Interact( input_identifier key_type )
 		}
 
 		// direction
-		if( m_state != STA_FLY )
+		//if( m_state != STA_FLY )pHud_Itembox->Set_Item( TYPE_MUSHROOM_DEFAULT );
+		if( m_state != STA_FLY );
 		{
 			if( m_direction != DIR_LEFT )
 			{
@@ -3613,6 +3822,52 @@ void cPlayer :: Action_Interact( input_identifier key_type )
 	{
 		Action_Jump();
 	}
+	else if ( key_type == INP_WEAPON1 )
+	{
+		Set_Type( MARYO_FIRE, 1, 1, 0 );
+	}
+	else if ( key_type == INP_WEAPON2 )
+	{
+		Set_Type( MARYO_ICE, 1, 1, 0 );
+	}
+	else if ( key_type == INP_WEAPON3 )
+	{
+		Set_Type( MARYO_BOOTS, 1, 1, 0 );
+	}
+	else if ( key_type == INP_WEAPON4 )
+	{
+		Action_Jump();
+	}
+	else if ( key_type == INP_WEAPON5 )
+	{
+		Action_Jump();
+	}
+	else if ( key_type == INP_WEAPON6 )
+	{
+		Action_Jump();
+	}
+	else if ( key_type == INP_WEAPON7 )
+	{
+		Action_Jump();
+	}
+	else if ( key_type == INP_WEAPON8 )
+	{
+		Action_Jump();
+	}
+	else if ( key_type == INP_WEAPON9 )
+	{
+		Action_Jump();
+	}
+	else if ( key_type == INP_WEAPON0 )
+	{
+		if ( pHud_Itembox->m_item_id == TYPE_MUSHROOM_DEFAULT )
+		{
+			life_bar = MAX_LIFE;
+			pHud_LifeDisplay->Set_Life(4);
+			pHud_Itembox->Reset();
+		}
+	}
+
 	// Request Item
 	else if( key_type == INP_ITEM )
 	{
@@ -3647,6 +3902,28 @@ void cPlayer :: Action_Shoot( void )
 	else if (num_shots > 3)
 	{
 		num_shots = 0;
+		
+		switch (maryo_type)
+		{
+			case MARYO_FIRE:
+			{
+				//pHud_EnergyDisplay->Decrease_Energy(1);
+				//weapon1_amount--;
+				pHud_EnergyDisplay->Set_Energy(weapon1_amount);
+				break;
+			}
+			case MARYO_ICE:
+			{
+				//pHud_EnergyDisplay->Decrease_Energy(1);
+				weapon2_amount--;
+				pHud_EnergyDisplay->Set_Energy(weapon2_amount);
+				break;
+			}
+			default:
+			{
+				break;
+			}
+		}
 	}
 	else
 	{
@@ -3662,10 +3939,15 @@ void cPlayer :: Action_Shoot( void )
 		ball_amount = num_shots * 2;
 	}
 
-	// if added ball
-	if( Ball_Add( ball_type, -1, ball_amount ) )
+	Set_Weapon_Energy();
+
+	if ( energy_bar > 0 )
 	{
-		throwing_counter = speedfactor_fps * 0.3f;
+		// if added ball
+		if( Ball_Add( ball_type, -1, ball_amount ) )
+		{
+			throwing_counter = speedfactor_fps * 0.3f;
+		}
 	}
 }
 
@@ -3718,6 +4000,7 @@ void cPlayer :: Action_Stop_Interact( input_identifier key_type )
 	{
 		Action_Stop_Jump();
 	}
+
 	// Shoot
 	else if( key_type == INP_SHOOT )
 	{
@@ -4224,11 +4507,14 @@ void cPlayer :: Handle_Collision_Enemy( cObjectCollision *collision )
 		// hit
 		if( hit_enemy )
 		{
-			pAudio->Play_Sound( "item/star_kill.ogg" );
-			pHud_Points->Add_Points( static_cast<unsigned int>( enemy->m_kill_points * 1.2f ), m_pos_x, m_pos_y, "", yellow, 1 );
-			// force complete downgrade
-			enemy->DownGrade( 1 );
-			Add_Kill_Multiplier();
+			if ( maryo_type == MARYO_BOOTS )
+			{
+				pAudio->Play_Sound( "item/star_kill.ogg" );
+				pHud_Points->Add_Points( static_cast<unsigned int>( enemy->m_kill_points * 1.2f ), m_pos_x, m_pos_y, "", yellow, 1 );
+				// force complete downgrade
+				enemy->DownGrade( 1 );
+				Add_Kill_Multiplier();
+			}
 			return;
 		}
 		// no hit

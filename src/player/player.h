@@ -35,6 +35,7 @@ enum Maryo_type
 	MARYO_ICE = 4,
 	MARYO_CAPE = 5,
 	MARYO_GHOST = 6,
+	MARYO_BOOTS = 7,
 	MARYO_DOG_SMALL = 21 // todo
 };
 
@@ -160,6 +161,9 @@ public:
 	void Set_Type( SpriteType item_type, bool animation = 1, bool sound = 1, bool temp_power = 0 );
 	// set the moving state
 	void Set_Moving_State( Moving_state new_state );
+	void Set_Weapon( Maryo_type new_type);
+	void Set_Weapon_Energy ( void );
+	void Check_Weapon3 ( void );
 
 	// default update
 	virtual void Update( void );
@@ -335,6 +339,20 @@ public:
 
 	//player life counter
 	float life_bar;
+	float energy_bar;
+
+	//weapon variables
+	int weapon1_amount;
+	int weapon2_amount;
+	int weapon3_amount;
+	int weapon4_amount;
+	int weapon5_amount;
+	int weapon6_amount;
+	int weapon7_amount;
+	int weapon8_amount;
+	int weapon9_amount;
+
+	bool weapon3_active;
 
 	// default position
 	static const float m_default_pos_x;

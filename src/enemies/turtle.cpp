@@ -1,8 +1,7 @@
 /***************************************************************************
  * turtle.cpp  -  turtle enemy class
  *
- * Copyright (C) 2011 - Cody Van De Mark
- * Copyright (C) 2003 - 2009 Florian Richter (Original)
+ * Copyright (C) 2003 - 2009 Florian Richter
  ***************************************************************************/
 /*
    This program is free software; you can redistribute it and/or modify

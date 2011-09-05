@@ -84,7 +84,7 @@ public:
 
 	// Keyboard
 	// key definitions
-	SDLKey m_key_up, m_key_down, m_key_left, m_key_right, m_key_jump, m_key_shoot, m_key_action;
+	SDLKey m_key_up, m_key_down, m_key_left, m_key_right, m_key_jump, m_key_shoot, m_key_action, m_key_weapon1, m_key_weapon2, m_key_weapon3, m_key_weapon4, m_key_weapon5, m_key_weapon6, m_key_weapon7, m_key_weapon8, m_key_weapon9, m_key_weapon0;
 	// scroll speed
 	float m_scroll_speed;
 	// Joystick
@@ -137,7 +137,7 @@ public:
 	static const float m_geometry_quality_default;
 	static const float m_texture_quality_default;
 	// Keyboard
-	static const SDLKey m_key_up_default, m_key_down_default, m_key_left_default, m_key_right_default, m_key_jump_default, m_key_shoot_default, m_key_action_default;
+	static const SDLKey m_key_up_default, m_key_down_default, m_key_left_default, m_key_right_default, m_key_jump_default, m_key_shoot_default, m_key_action_default, m_key_weapon1_default, m_key_weapon2_default, m_key_weapon3_default, m_key_weapon4_default, m_key_weapon5_default, m_key_weapon6_default, m_key_weapon7_default, m_key_weapon8_default, m_key_weapon9_default, m_key_weapon0_default;
 	static const float m_scroll_speed_default;
 	// Joystick
 	static const bool m_joy_enabled_default;

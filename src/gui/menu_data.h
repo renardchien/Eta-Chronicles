@@ -97,6 +97,9 @@ public:
 	// Exit
 	virtual void Exit( void );
 
+	// Get all weapons from the given directory
+	void Get_Weapons( std::string dir, CEGUI::colour color );
+
 	// Get all levels from the given directory
 	void Get_Levels( std::string dir, CEGUI::colour color );
 
@@ -113,6 +116,8 @@ public:
 	 * and exit if successful
 	*/
 	bool Load_Level( std::string name );
+
+	bool Load_Weapon( std::string name);
 
 	// tabcontrol selection changed event
 	bool TabControl_Selection_Changed( const CEGUI::EventArgs &event );
@@ -132,6 +137,9 @@ public:
 	bool Level_Select( const CEGUI::EventArgs &event );
 	// level selected for entering event
 	bool Level_Select_Final_List( const CEGUI::EventArgs &event );
+
+	bool Weapon_Select( const CEGUI::EventArgs &event);
+	bool Weapon_Select_Final_List( const CEGUI::EventArgs &event );
 
 	// level new button event
 	bool Button_Level_New_Clicked( const CEGUI::EventArgs &event );

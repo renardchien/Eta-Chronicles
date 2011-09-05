@@ -1,8 +1,7 @@
 /***************************************************************************
  * furball.cpp  -  little moving around enemy
  *
- * Copyright (C) 2011 - Cody Van De Mark
- * Copyright (C) 2003 - 2009 Florian Richter (Original)
+ * Copyright (C) 2003 - 2009 Florian Richter
  ***************************************************************************/
 /*
    This program is free software; you can redistribute it and/or modify
@@ -777,8 +776,10 @@ void cFurball :: Handle_Collision_Player( cObjectCollision *collision )
 		return;
 	}
 
-	if( collision->direction == DIR_TOP && pPlayer->m_state != STA_FLY )
+	if( collision->direction == DIR_TOP && pPlayer->m_state != STA_FLY && pPlayer->maryo_type == MARYO_BOOTS && pPlayer->weapon3_amount > 0 )
 	{
+		pPlayer->Check_Weapon3();
+
 		if( m_type == TYPE_FURBALL_BOSS )
 		{
 			if( m_state == STA_STAY || m_state == STA_RUN )

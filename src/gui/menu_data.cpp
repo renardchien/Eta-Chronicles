@@ -390,14 +390,24 @@ void cMenu_Start :: Init_GUI( void )
 	CEGUI::Listbox *listbox_levels = static_cast<CEGUI::Listbox *>(CEGUI::WindowManager::getSingleton().getWindow( "listbox_levels" ));
 	listbox_levels->setSortingEnabled( 1 );
 
+	//CEGUI::Listbox *listbox_weapons = static_cast<CEGUI::Listbox *>(CEGUI::WindowManager::getSingleton().getWindow( "listbox_weapons" ));
+	//listbox_weapons->setSortingEnabled( 1 );
+
 	// events
 	listbox_levels->subscribeEvent( CEGUI::Window::EventKeyDown, CEGUI::Event::Subscriber( &cMenu_Start::Listbox_Keydown, this ) );
 	listbox_levels->subscribeEvent( CEGUI::Window::EventCharacterKey, CEGUI::Event::Subscriber( &cMenu_Start::Listbox_Character_Key, this ) );
+
+	//listbox_weapons->subscribeEvent( CEGUI::Window::EventKeyDown, CEGUI::Event::Subscriber( &cMenu_Start::Listbox_Keydown, this ) );
+	//listbox_weapons->subscribeEvent( CEGUI::Window::EventCharacterKey, CEGUI::Event::Subscriber( &cMenu_Start::Listbox_Character_Key, this ) );
 
 	// get game level
 	Get_Levels( DATA_DIR "/" GAME_LEVEL_DIR, CEGUI::colour( 1, 0.8f, 0.6f ) );
 	// get user level
 	Get_Levels( pResource_Manager->user_data_dir + USER_LEVEL_DIR, CEGUI::colour( 0.8f, 1, 0.6f ) );
+
+	//Get_Weapons( DATA_DIR "/" GAME_LEVEL_DIR, CEGUI::colour( 1, 0.8f, 0.6f ) );
+	// get user level
+	//Get_Weapons( pResource_Manager->user_data_dir + USER_LEVEL_DIR, CEGUI::colour( 0.8f, 1, 0.6f ) );
 
 	// World Listbox events
 	listbox_worlds->subscribeEvent( CEGUI::Listbox::EventSelectionChanged, CEGUI::Event::Subscriber( &cMenu_Start::World_Select, this ) );
@@ -405,6 +415,9 @@ void cMenu_Start :: Init_GUI( void )
 	// Level Listbox events
 	listbox_levels->subscribeEvent( CEGUI::Listbox::EventSelectionChanged, CEGUI::Event::Subscriber( &cMenu_Start::Level_Select, this ) );
 	listbox_levels->subscribeEvent( CEGUI::Listbox::EventMouseDoubleClick, CEGUI::Event::Subscriber( &cMenu_Start::Level_Select_Final_List, this ) );
+
+	//listbox_weapons->subscribeEvent( CEGUI::Listbox::EventSelectionChanged, CEGUI::Event::Subscriber( &cMenu_Start::Weapon_Select, this ) );
+	//listbox_weapons->subscribeEvent( CEGUI::Listbox::EventMouseDoubleClick, CEGUI::Event::Subscriber( &cMenu_Start::Weapon_Select_Final_List, this ) );
 	// Level Buttons
 	CEGUI::PushButton *button_new = static_cast<CEGUI::PushButton *>(CEGUI::WindowManager::getSingleton().getWindow( "button_level_new" ));
 	button_new->subscribeEvent( CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber( &cMenu_Start::Button_Level_New_Clicked, this ) );
@@ -468,6 +481,8 @@ void cMenu_Start :: Exit( void )
 	pMenuCore->next_menu = MENU_MAIN;
 	Game_Action = GA_ENTER_MENU;
 }
+
+
 
 void cMenu_Start :: Get_Levels( std::string dir, CEGUI::colour color )
 {
@@ -552,6 +567,16 @@ void cMenu_Start :: Load_Selected( void )
 			Load_Level( item->getText().c_str() );
 		}
 	}
+	/*else
+	{
+		CEGUI::ListboxItem *item = (static_cast<CEGUI::Listbox *>(CEGUI::WindowManager::getSingleton().getWindow( "listbox_weapons" )))->getFirstSelectedItem();
+
+		// load level
+		if( item )
+		{
+			Load_Weapon( item->getText().c_str() );
+		}
+	} */
 }
 
 void cMenu_Start :: Load_World( std::string name )
@@ -596,6 +621,13 @@ bool cMenu_Start :: Load_Level( std::string level_name )
 	return 1;
 }
 
+/*
+bool cMenu_Start :: Load_Weapon( std::string weapon_name)
+{
+
+	return 1;	
+} */
+
 bool cMenu_Start :: TabControl_Selection_Changed( const CEGUI::EventArgs &e )
 {
 	const CEGUI::WindowEventArgs &windowEventArgs = static_cast<const CEGUI::WindowEventArgs&>( e );
@@ -609,6 +641,10 @@ bool cMenu_Start :: TabControl_Selection_Changed( const CEGUI::EventArgs &e )
 	{
 		static_cast<CEGUI::Listbox *>(CEGUI::WindowManager::getSingleton().getWindow( "listbox_levels" ))->activate();
 	}
+	//else if( tabcontrol->getSelectedTabIndex() == 2)
+	//{
+	//	static_cast<CEGUI::Listbox *>(CEGUI::WindowManager::getSingleton().getWindow( "listbox_weapons" ))->activate();
+	//}
 
 	return 1;
 }
@@ -842,6 +878,28 @@ bool cMenu_Start :: Level_Select( const CEGUI::EventArgs &event )
 	return 1;
 }
 
+/*
+bool cMenu_Start :: Weapon_Select( const CEGUI::EventArgs &event )
+{
+	const CEGUI::WindowEventArgs &windowEventArgs = static_cast<const CEGUI::WindowEventArgs&>( event );
+	CEGUI::ListboxItem *item = static_cast<CEGUI::Listbox *>( windowEventArgs.window )->getFirstSelectedItem();
+
+	// set level something
+	if( item )
+	{
+		// todo : needs level manager
+	}
+	// clear
+	else
+	{
+		// todo : needs level manager
+	}
+
+	return 1;
+} 
+
+*/
+
 bool cMenu_Start :: Level_Select_Final_List( const CEGUI::EventArgs &event )
 {
 	const CEGUI::WindowEventArgs &windowEventArgs = static_cast<const CEGUI::WindowEventArgs&>( event );
@@ -856,6 +914,21 @@ bool cMenu_Start :: Level_Select_Final_List( const CEGUI::EventArgs &event )
 	return 1;
 }
 
+/*
+bool cMenu_Start :: Weapon_Select_Final_List( const CEGUI::EventArgs &event )
+{
+	const CEGUI::WindowEventArgs &windowEventArgs = static_cast<const CEGUI::WindowEventArgs&>( event );
+	CEGUI::ListboxItem *item = static_cast<CEGUI::Listbox *>( windowEventArgs.window )->getFirstSelectedItem();
+
+	// load weapon
+	if( item )
+	{
+		Load_Weapon( item->getText().c_str() );
+	}
+
+	return 1;
+} 
+*/
 
 bool cMenu_Start :: Button_Level_New_Clicked( const CEGUI::EventArgs &event )
 {
@@ -2514,6 +2587,17 @@ void cMenu_Options_Controls :: Build_Shortcut_List( bool joystick /* = 0 */ )
 	shortcuts.push_back( cShortcut_item( UTF8_("Jump"), INP_JUMP ) );
 	shortcuts.push_back( cShortcut_item( UTF8_("Shoot"), INP_SHOOT ) );
 	shortcuts.push_back( cShortcut_item( UTF8_("Action"), INP_ACTION ) );
+	shortcuts.push_back( cShortcut_item( UTF8_("Weapon1"), INP_WEAPON1 ) );
+	shortcuts.push_back( cShortcut_item( UTF8_("Weapon2"), INP_WEAPON2 ) );
+	shortcuts.push_back( cShortcut_item( UTF8_("Weapon3"), INP_WEAPON3 ) );
+	shortcuts.push_back( cShortcut_item( UTF8_("Weapon4"), INP_WEAPON4 ) );
+	shortcuts.push_back( cShortcut_item( UTF8_("Weapon5"), INP_WEAPON5 ) );
+	shortcuts.push_back( cShortcut_item( UTF8_("Weapon6"), INP_WEAPON6 ) );
+	shortcuts.push_back( cShortcut_item( UTF8_("Weapon7"), INP_WEAPON7 ) );
+	shortcuts.push_back( cShortcut_item( UTF8_("Weapon8"), INP_WEAPON8 ) );
+	shortcuts.push_back( cShortcut_item( UTF8_("Weapon9"), INP_WEAPON9 ) );
+	shortcuts.push_back( cShortcut_item( UTF8_("Weapon0"), INP_WEAPON0 ) );
+
 
 	// only joystick
 	if( joystick )
@@ -3077,6 +3161,17 @@ void cMenu_Credits :: Init( void )
 	drawlist.clear();
 
 	// add credits texts
+	drawlist.push_back( new cHudSprite( pFont->Render_Text( pFont->m_font_normal, "========= Eta Chronicles Development =========", white ), 0, 20, 1 ) );
+	drawlist.push_back( new cHudSprite( pFont->Render_Text( pFont->m_font_normal, "       ** Project Fork of Secret Maryo Chronicles **      ", white ), 0, 20, 1 ) );
+
+	drawlist.push_back( new cHudSprite( pFont->Render_Text( pFont->m_font_normal, "Cody Van De Mark", white ), 0, 20, 1 ) );
+	drawlist.back()->Set_Shadow( black, 1 );
+	drawlist.push_back( new cHudSprite( pFont->Render_Text( pFont->m_font_normal, " - Eta Chronicles Developer", white ), 0, -3, 1 ) );
+	drawlist.push_back( new cHudSprite( pFont->Render_Text( pFont->m_font_normal, " - Eta Chronicles Project Leader", white ), 0, -3, 1 ) );	
+	drawlist.push_back( new cHudSprite( pFont->Render_Text( pFont->m_font_normal, " ", white ), 0, 20, 1 ) );
+
+	drawlist.push_back( new cHudSprite( pFont->Render_Text( pFont->m_font_normal, "=== Original Secret Maryo Chronicles Development ===", white ), 0, 20, 1 ) );
+
 	drawlist.push_back( new cHudSprite( pFont->Render_Text( pFont->m_font_normal, "Florian Richter (FluXy)", white ), 0, 20, 1 ) );
 	drawlist.back()->Set_Shadow( black, 1 );
 	drawlist.push_back( new cHudSprite( pFont->Render_Text( pFont->m_font_normal, " - Dedicated Developer", white ), 0, -3, 1 ) );

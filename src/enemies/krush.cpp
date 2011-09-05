@@ -1,8 +1,7 @@
 /***************************************************************************
  * krush.cpp  -  The little dinosaur
  *
- * Copyright (C) 2011 - Cody Van De Mark
- * Copyright (C) 2004 - 2009 Florian Richter (Original)
+ * Copyright (C) 2004 - 2009 Florian Richter
  ***************************************************************************/
 /*
    This program is free software; you can redistribute it and/or modify
@@ -399,8 +398,9 @@ void cKrush :: Handle_Collision_Player( cObjectCollision *collision )
 		return;
 	}
 
-	if( collision->direction == DIR_TOP && pPlayer->m_state != STA_FLY )
+	if( collision->direction == DIR_TOP && pPlayer->m_state != STA_FLY && pPlayer->maryo_type == MARYO_BOOTS && pPlayer->weapon3_amount > 0 )
 	{
+		pPlayer->Check_Weapon3();
 		pHud_Points->Add_Points( m_kill_points, pPlayer->m_pos_x, pPlayer->m_pos_y, "", static_cast<Uint8>(255), 1 );
 		pAudio->Play_Sound( m_kill_sound );
 

@@ -1,8 +1,7 @@
 /***************************************************************************
  * enemy.cpp  -  base class for all enemies
  *
- * Copyright (C) 2011 - Cody Van De Mark
- * Copyright (C) 2003 - 2009 Florian Richter (Original)
+ * Copyright (C) 2003 - 2009 Florian Richter
  ***************************************************************************/
 /*
    This program is free software; you can redistribute it and/or modify
@@ -322,7 +321,8 @@ void cEnemy :: set_life_left (signed int damage_type)
 	//1 - fireball (fire cannon)
 	//2 - iceball (ice cannon)
 	//3 - smokeball (smoke cannon?)
-	//4 - TBA
+	//4 - Metal gun (Metal cannon)
+	//5 - 
 
 	//These may be overwritten by each enemy type if we decide to have resistances to certain weapons
 

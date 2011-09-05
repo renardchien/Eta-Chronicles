@@ -668,6 +668,47 @@ bool cLevel :: Key_Down( const SDLKey key )
 	{
 		pPlayer->Action_Interact( INP_ITEM );
 	}
+	else if ( key == SDLK_1 && !editor_enabled)
+	{
+		pPlayer->Action_Interact( INP_WEAPON1 );
+	}
+	else if ( key == SDLK_2 && !editor_enabled)
+	{
+		pPlayer->Action_Interact( INP_WEAPON2 );
+	}
+	else if ( key == SDLK_3 && !editor_enabled)
+	{
+		pPlayer->Action_Interact( INP_WEAPON3 );
+	}
+	else if ( key == SDLK_4 && !editor_enabled)
+	{
+		pPlayer->Action_Interact( INP_WEAPON4 );
+	}
+	else if ( key == SDLK_5 && !editor_enabled)
+	{
+		pPlayer->Action_Interact( INP_WEAPON5 );
+	}
+	else if ( key == SDLK_6 && !editor_enabled)
+	{
+		pPlayer->Action_Interact( INP_WEAPON6 );
+	}
+	else if ( key == SDLK_7 && !editor_enabled)
+	{
+		pPlayer->Action_Interact( INP_WEAPON7 );
+	}
+	else if ( key == SDLK_8 && !editor_enabled)
+	{
+		pPlayer->Action_Interact( INP_WEAPON8 );
+	}
+	else if ( key == SDLK_9 && !editor_enabled)
+	{
+		pPlayer->Action_Interact( INP_WEAPON9 );
+	}
+	else if ( key == SDLK_0 && !editor_enabled)
+	{
+		pPlayer->Action_Interact( INP_WEAPON0 );
+	}
+
 	// God Mode
 	else if( pKeyboard->keys[SDLK_g] && pKeyboard->keys[SDLK_o] && pKeyboard->keys[SDLK_d] && !editor_enabled )
 	{
@@ -1584,6 +1625,7 @@ bool cLevel :: HandleMessage( const std::string *parts, unsigned int count, unsi
 
 				m_sprite_manager->Add( static_cast<cMovingSprite *>(temp) );
 			}
+
 			// support for old levels ( lower than V.0.8 )
 			else
 			{

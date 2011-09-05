@@ -809,6 +809,7 @@ void Update_Game( void )
 					Draw_Effect_In( EFFECT_IN_BLACK, 3 );
 				}
 			}
+
 			// Enter Settings
 			else if( Current_Game_Action == GA_ENTER_LEVEL_SETTINGS )
 			{

@@ -335,6 +335,46 @@ SDLKey *cKeyboard :: Get_Shortcut( const input_identifier shortcut_id ) const
 	{
 		return &pPreferences->m_key_action; 
 	}
+	else if (shortcut_id == INP_WEAPON1 )
+	{
+		return &pPreferences->m_key_weapon1;
+	}
+	else if (shortcut_id == INP_WEAPON2 )
+	{
+		return &pPreferences->m_key_weapon2;
+	}
+	else if (shortcut_id == INP_WEAPON3 )
+	{
+		return &pPreferences->m_key_weapon3;
+	}	
+	else if (shortcut_id == INP_WEAPON4 )
+	{
+		return &pPreferences->m_key_weapon4;
+	}	
+	else if (shortcut_id == INP_WEAPON5 )
+	{
+		return &pPreferences->m_key_weapon5;
+	}	
+	else if (shortcut_id == INP_WEAPON6 )
+	{
+		return &pPreferences->m_key_weapon6;
+	}	
+	else if (shortcut_id == INP_WEAPON7 )
+	{
+		return &pPreferences->m_key_weapon7;
+	}	
+	else if (shortcut_id == INP_WEAPON8 )
+	{
+		return &pPreferences->m_key_weapon8;
+	}	
+	else if (shortcut_id == INP_WEAPON9 )
+	{
+		return &pPreferences->m_key_weapon9;
+	}	
+	else if (shortcut_id == INP_WEAPON0 )
+	{
+		return &pPreferences->m_key_weapon0;
+	}		
 
 	return NULL;
 }

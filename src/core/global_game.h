@@ -121,7 +121,8 @@ enum GameAction
 	GA_ENTER_WORLD		= 4,
 	GA_ENTER_LEVEL		= 5,
 	GA_ACTIVATE_LEVEL_EXIT	= 6,
-	GA_ENTER_LEVEL_SETTINGS	= 7
+	GA_ENTER_LEVEL_SETTINGS	= 7,
+	GA_ENTER_MENU_WEAPONS 	= 8 
 };
 
 /* *** *** *** *** *** Level draw type *** *** *** *** *** *** *** *** *** *** *** *** */
@@ -252,6 +253,8 @@ enum SpriteType
 	TYPE_LIFEDISPLAY = 15,
 	TYPE_GOLDDISPLAY = 16,
 	TYPE_MENUBG = 17,
+	TYPE_WEAPON = 18,
+	TYPE_ENERGYDISPLAY = 19,
 	TYPE_ITEMBOXDISPLAY = 32
 };
 
@@ -327,7 +330,18 @@ enum input_identifier
 	// Request Item
 	INP_ITEM = 8,
 	// General Exit/Leave/Cancel
-	INP_EXIT = 9
+	INP_EXIT = 9,
+
+	INP_WEAPON1 = 10,
+	INP_WEAPON2 = 11,
+	INP_WEAPON3 = 12,
+	INP_WEAPON4 = 13,
+	INP_WEAPON5 = 14,
+	INP_WEAPON6 = 15,
+	INP_WEAPON7 = 16,
+	INP_WEAPON8 = 17,
+	INP_WEAPON9 = 18,
+	INP_WEAPON0 = 19
 };
 
 /* *** Ball Effect types ***  */

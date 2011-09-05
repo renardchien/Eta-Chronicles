@@ -70,6 +70,16 @@ const SDLKey cPreferences::m_key_right_default = SDLK_RIGHT;
 const SDLKey cPreferences::m_key_jump_default = SDLK_s;
 const SDLKey cPreferences::m_key_shoot_default = SDLK_SPACE;
 const SDLKey cPreferences::m_key_action_default = SDLK_a;
+const SDLKey cPreferences::m_key_weapon1_default = SDLK_1;
+const SDLKey cPreferences::m_key_weapon2_default = SDLK_2;
+const SDLKey cPreferences::m_key_weapon3_default = SDLK_3;
+const SDLKey cPreferences::m_key_weapon4_default = SDLK_4;
+const SDLKey cPreferences::m_key_weapon5_default = SDLK_5;
+const SDLKey cPreferences::m_key_weapon6_default = SDLK_6;
+const SDLKey cPreferences::m_key_weapon7_default = SDLK_7;
+const SDLKey cPreferences::m_key_weapon8_default = SDLK_8;
+const SDLKey cPreferences::m_key_weapon9_default = SDLK_9;
+const SDLKey cPreferences::m_key_weapon0_default = SDLK_0;
 const float cPreferences::m_scroll_speed_default = 1.0f;
 // Joystick
 const bool cPreferences::m_joy_enabled_default = 1;
@@ -288,6 +298,17 @@ void cPreferences :: Reset_Keyboard( void )
 	m_key_shoot = m_key_shoot_default;
 	m_key_action = m_key_action_default;
 	m_scroll_speed = m_scroll_speed_default;
+	m_key_weapon1 = m_key_weapon1_default;
+	m_key_weapon2 = m_key_weapon2_default;
+	m_key_weapon3 = m_key_weapon3_default;
+	m_key_weapon4 = m_key_weapon4_default;
+	m_key_weapon5 = m_key_weapon5_default;
+	m_key_weapon6 = m_key_weapon6_default;
+	m_key_weapon7 = m_key_weapon7_default;
+	m_key_weapon8 = m_key_weapon8_default;
+	m_key_weapon9 = m_key_weapon9_default;
+	m_key_weapon0 = m_key_weapon0_default;
+	
 }
 
 void cPreferences :: Reset_Joystick( void )

@@ -1,8 +1,7 @@
 /***************************************************************************
  * gee.cpp  -  Electro, Lava or Gift monster
  *
- * Copyright (C) 2011 - Cody Van De Mark
- * Copyright (C) 2006 - 2009 Florian Richter (Original)
+ * Copyright (C) 2006 - 2009 Florian Richter
  ***************************************************************************/
 /*
    This program is free software; you can redistribute it and/or modify
@@ -619,8 +618,10 @@ void cGee :: Handle_Collision_Player( cObjectCollision *collision )
 		return;
 	}
 
-	if( collision->direction == DIR_TOP && pPlayer->m_state != STA_FLY )
+	if( collision->direction == DIR_TOP && pPlayer->m_state != STA_FLY && pPlayer->maryo_type == MARYO_BOOTS && pPlayer->weapon3_amount > 0 )
 	{
+		pPlayer->Check_Weapon3();
+
 		pAudio->Play_Sound( m_kill_sound );
 
 		DownGrade();
